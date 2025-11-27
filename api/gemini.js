@@ -48,9 +48,9 @@ export default async function handler(req, res) {
       };
     });
 
-    // 构建 Gemini API 请求
+    // 构建 Gemini API 请求 (按官方文档格式)
     const streamParam = stream ? 'streamGenerateContent' : 'generateContent';
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:${streamParam}?key=${GEMINI_API_KEY}`;
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:${streamParam}`;
 
     const requestBody = {
       contents: contents,
@@ -60,11 +60,12 @@ export default async function handler(req, res) {
       }
     };
 
-    // 调用 Gemini API
+    // 调用 Gemini API (使用 x-goog-api-key Header)
     const geminiResponse = await fetch(geminiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'x-goog-api-key': GEMINI_API_KEY  // 官方推荐方式
       },
       body: JSON.stringify(requestBody)
     });
